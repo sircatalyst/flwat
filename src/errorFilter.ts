@@ -41,9 +41,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
           ? exceptionResponseMessage || exception.response
           : 'Internal Server Error',
 
-      status: status !== 200 || status !== 201 ? 'error' : 'success',
+      status: status !== 200 ? 'error' : 'success',
 
-      data: status === 400 ? null : status,
+      data: status !== 200 ? null : response
     };
 
     if (exception.response.status === 'error') {

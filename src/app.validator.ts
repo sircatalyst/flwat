@@ -13,11 +13,28 @@ export const customValidator = (payload: PostRuleValidationDTO): void => {
     );
   }
 
+  //Ensure the type for payload.rule object is right and handle error message
+  if (typeof payload.rule !== 'object') {
+    throw new HttpException(
+      'rule should be an object.',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  //Ensure the type for payload.rule object is right and handle error message
+  if (typeof payload.rule.field === 'undefined') {
+    throw new HttpException(
+      'rule.field is required.',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
   // Check if payload.rule.field is a string and its value is in payload.data
   if (
     typeof payload.rule.field === 'string' &&
     typeof payload.data === 'object'
   ) {
+
     // Check if payload.rule.field value point to a value of object type and validate
     if (payload.rule.field.includes('.')) {
       const ruleFieldObjectKey = payload.rule.field.split('.')[0];
@@ -39,14 +56,16 @@ export const customValidator = (payload: PostRuleValidationDTO): void => {
           `field ${ruleFieldNestedObjectKey} is missing from data.${ruleFieldObjectKey}.`,
           HttpStatus.BAD_REQUEST,
         );
+      } else {
+        return;
       }
-	}
-
+    }
     if (!Object.keys(payload.data).includes(payload.rule.field)) {
       throw new HttpException(
         `field ${payload.rule.field} is missing from data.`,
         HttpStatus.BAD_REQUEST,
       );
     }
+
   }
 };

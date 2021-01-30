@@ -39,7 +39,6 @@ export class PostRuleValidationDTO {
   @IsNotEmptyObject()
   @IsNotEmpty({ message: 'rule is required.' })
   @IsObject({ message: 'rule should be an object.' })
-  @ValidateNested()
   rule: ruleDTO;
 
   @IsNotEmpty({ message: 'data is required.' })
